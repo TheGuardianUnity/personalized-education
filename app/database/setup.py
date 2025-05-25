@@ -11,7 +11,6 @@ from app.core.config import DATABASE_URL
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Function to create engine with retry logic
 def create_db_engine(url, max_retries=3, retry_interval=5):
     retries = 0
     while retries < max_retries:
@@ -24,7 +23,10 @@ def create_db_engine(url, max_retries=3, retry_interval=5):
                 pool_timeout=30,
                 pool_recycle=1800,
                 pool_pre_ping=True,
-                connect_args={"connect_timeout": 10}
+                connect_args={
+                    "sslmode": "require",
+                    "connect_timeout": 10
+                }
             )
             # Test the connection
             connection = engine.connect()
@@ -40,7 +42,7 @@ def create_db_engine(url, max_retries=3, retry_interval=5):
             else:
                 logger.critical("Failed to connect to database after maximum retries")
                 raise
-
+            
 # Create engine with retry logic
 engine = create_db_engine(DATABASE_URL)
 
