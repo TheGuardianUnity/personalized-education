@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import API_PREFIX, DEBUG, PROJECT_NAME
 from app.database.setup import engine  # Re-added engine import
-from app.endpoints import hello, mistral_chat
+from app.endpoints import hello, mistral_chat, beyond_agent
 
 # Note: Tables are not automatically created - will be managed separately
 
@@ -24,6 +24,7 @@ app.add_middleware(
 # Include routers
 app.include_router(hello.router, prefix=API_PREFIX)
 app.include_router(mistral_chat.router, prefix=API_PREFIX + "/mistral")
+app.include_router(beyond_agent.router, prefix=API_PREFIX + "/beyond")
 
 # Root endpoint
 @app.get("/")
